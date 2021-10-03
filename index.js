@@ -3,13 +3,17 @@ const app = express();
 const cors = require("cors");
 const mysql = require("mysql");
 const { urlencoded } = require("body-parser");
+/** import routes*/
+const movieRouter = require("./routes/Movie");
 
-const db = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "boye.claude@1502",
-  database: "moviedb",
-});
+// const db = mysql.createPool({
+//   host: "localhost",
+//   user: "root",
+//   password: "boye.claude@1502",
+//   database: "moviedb",
+// });
+
+app.use("/movie", movieRouter);
 
 /** to manage cors issues in the client */
 app.use(cors());
@@ -18,44 +22,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use(urlencoded({ extended: true }));
-
-/** Get elements from the db */
-app.get("/api/get", (request, response) => {
-  const sqlGet = "SELECT * FROM movie_reviews";
-  db.query(sqlGet, (error, result) => {
-    response.send(result);
-  });
-});
-
-/** create Element */
-app.post("/api/create", (request, response) => {
-  const movieName = request.body.movieName;
-  const movieReviews = request.body.movieReviews;
-
-  const sqlCreate =
-    "INSERT INTO movie_reviews(movieName, movieReviews) VALUES (?,?)";
-  db.query(sqlCreate, [movieName, movieReviews], (error, result) => {});
-});
-
-/** delete element */
-app.delete("/api/delete/:movieName", (request, response) => {
-  const name = request.params.movieName;
-  const sqlDelete = "DELETE FROM movie_reviews WHERE movieName = ?";
-  db.query(sqlDelete, name, (error, result) => {
-    if (error) console.log(error);
-  });
-});
-
-/** udpate element */
-app.put("/api/put", (request, response) => {
-  const name = request.body.movieName;
-  const review = request.body.movieReviews;
-  const sqlUpdate =
-    "UPDATE  movie_reviews SET movieReviews = ? WHERE movieName = ?";
-  db.query(sqlUpdate, [review, name], (error, result) => {
-    if (error) console.log(error);
-  });
-});
 
 /** server on */
 app.listen(4000, () => {
