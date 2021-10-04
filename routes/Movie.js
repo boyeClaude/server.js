@@ -48,3 +48,10 @@ router.put("/put", (request, response) => {
 });
 
 module.exports = router;
+
+/**
+ * router.get("/", GetAllMovies);
+ * router.post("/create", createMovie);
+ * router.put("/", UpdateMovie);
+ * router.delete("/:movieName", DeleteMovie);
+ */
